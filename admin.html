@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Portfolio Admin — Godfrey Ajeyemi</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #0d1117;
+  --bg2: #161b22;
+  --bg3: #1c2128;
+  --blue: #2f81f7;
+  --blue-dim: rgba(47,129,247,0.12);
+  --teal: #39d353;
+  --red: #f85149;
+  --red-dim: rgba(248,81,73,0.1);
+  --white: #e6edf3;
+  --muted: #7d8590;
+  --border: rgba(255,255,255,0.08);
+  --ff-body: 'DM Sans', sans-serif;
+  --ff-mono: 'JetBrains Mono', monospace;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--ff-body);
+  min-height: 100vh;
+}
+
+/* LOGIN SCREEN */
+#loginScreen {
+  min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg);
+  position: relative;
+}
+.login-grid-bg {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(47,129,247,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(47,129,247,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+.login-box {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 3rem;
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+  z-index: 1;
+}
+.login-box::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, var(--blue), var(--teal));
+}
+.login-logo {
+  font-family: var(--ff-mono);
+  font-size: 0.85rem;
+  color: var(--blue);
+  margin-bottom: 2rem;
+  display: flex; align-items: center; gap: 0.8rem;
+}
+.login-logo::before { content: ''; width: 20px; height: 1px; background: var(--blue); }
+.login-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.login-sub {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 2rem;
+}
+.login-input-wrap { position: relative; margin-bottom: 1rem; }
+.login-input-wrap label {
+  display: block;
+  font-family: var(--ff-mono);
+  font-size: 0.65rem;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+.login-input-wrap input {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-family: var(--ff-mono);
+  font-size: 1rem;
+  padding: 0.9rem 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+  letter-spacing: 0.2em;
+}
+.login-input-wrap input:focus { border-color: var(--blue); }
+.login-btn {
+  width: 100%;
+  background: var(--blue);
+  color: #0d1117;
+  border: none;
+  font-family: var(--ff-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 0.5rem;
+}
+.login-btn:hover { background: #58a6ff; }
+.login-error {
+  font-family: var(--ff-mono);
+  font-size: 0.75rem;
+  color: var(--red);
+  margin-top: 0.8rem;
+  display: none;
+}
+.login-hint {
+  font-family: var(--ff-mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  margin-top: 1.5rem;
+  text-align: center;
+}
+.login-hint a { color: var(--blue); }
+
+/* ADMIN SCREEN */
+#adminScreen { display: none; }
+.admin-header {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 2rem;
+  display: flex; justify-content: space-between; align-items: center;
+  position: sticky; top: 0; z-index: 10;
+}
+.admin-logo {
+  font-family: var(--ff-mono);
+  font-size: 0.85rem;
+  color: var(--blue);
+}
+.admin-logo span { color: var(--muted); }
+.admin-header-right { display: flex; gap: 1rem; align-items: center; }
+.admin-view-btn {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.admin-view-btn:hover { color: var(--blue); border-color: var(--blue); }
+.admin-logout {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  color: var(--red);
+  border: 1px solid rgba(248,81,73,0.3);
+  padding: 0.5rem 1rem;
+  background: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.admin-logout:hover { background: var(--red-dim); }
+
+.admin-body {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* PROJECT LIST */
+.panel-title {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1.2rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.project-count {
+  background: var(--blue-dim);
+  border: 1px solid rgba(47,129,247,0.2);
+  color: var(--blue);
+  font-size: 0.65rem;
+  padding: 0.2rem 0.6rem;
+}
+.projects-list { display: flex; flex-direction: column; gap: 0.8rem; }
+.project-row {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 1.2rem 1.5rem;
+  display: flex; align-items: center; gap: 1.2rem;
+  transition: border-color 0.2s;
+}
+.project-row:hover { border-color: rgba(47,129,247,0.3); }
+.project-row-icon { font-size: 1.8rem; min-width: 2rem; }
+.project-row-info { flex: 1; }
+.project-row-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.2rem;
+}
+.project-row-tags {
+  font-family: var(--ff-mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+.project-row-actions { display: flex; gap: 0.5rem; }
+.btn-edit {
+  font-family: var(--ff-mono);
+  font-size: 0.65rem;
+  color: var(--blue);
+  border: 1px solid rgba(47,129,247,0.3);
+  background: none;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-edit:hover { background: var(--blue-dim); }
+.btn-delete {
+  font-family: var(--ff-mono);
+  font-size: 0.65rem;
+  color: var(--red);
+  border: 1px solid rgba(248,81,73,0.3);
+  background: none;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-delete:hover { background: var(--red-dim); }
+.featured-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--teal);
+  min-width: 8px;
+  box-shadow: 0 0 6px var(--teal);
+}
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  border: 1px dashed var(--border);
+}
+.empty-state .big { font-size: 3rem; margin-bottom: 1rem; }
+
+/* FORM PANEL */
+.form-panel {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 2rem;
+  position: sticky;
+  top: 5rem;
+  align-self: start;
+}
+.form-panel::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, var(--blue), var(--teal));
+}
+.form-panel-title {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.field { margin-bottom: 1rem; }
+.field label {
+  display: block;
+  font-family: var(--ff-mono);
+  font-size: 0.6rem;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.4rem;
+}
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-family: var(--ff-body);
+  font-size: 0.9rem;
+  padding: 0.8rem 0.9rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.field input:focus,
+.field textarea:focus,
+.field select:focus { border-color: var(--blue); }
+.field textarea { resize: vertical; min-height: 90px; }
+.field input::placeholder,
+.field textarea::placeholder { color: var(--muted); font-size: 0.85rem; }
+.field select option { background: var(--bg3); }
+.field-hint {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 0.3rem;
+}
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.featured-toggle {
+  display: flex; align-items: center; gap: 0.8rem;
+  padding: 0.8rem;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+.featured-toggle input[type="checkbox"] { display: none; }
+.toggle-track {
+  width: 36px; height: 20px;
+  background: var(--border);
+  border-radius: 10px;
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+.toggle-track.on { background: var(--teal); }
+.toggle-thumb {
+  width: 14px; height: 14px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 3px; left: 3px;
+  transition: left 0.2s;
+}
+.toggle-track.on .toggle-thumb { left: 19px; }
+.toggle-label {
+  font-family: var(--ff-mono);
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+.form-actions { display: flex; gap: 0.8rem; margin-top: 1.5rem; }
+.btn-save {
+  flex: 1;
+  background: var(--blue);
+  color: #0d1117;
+  border: none;
+  font-family: var(--ff-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-save:hover { background: #58a6ff; }
+.btn-cancel {
+  background: none;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  font-family: var(--ff-mono);
+  font-size: 0.75rem;
+  padding: 0.9rem 1.2rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-cancel:hover { color: var(--white); border-color: var(--muted); }
+
+/* ICON PICKER */
+.icon-picker { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+.icon-opt {
+  width: 38px; height: 38px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  font-size: 1.2rem;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 4px;
+}
+.icon-opt:hover, .icon-opt.selected { border-color: var(--blue); background: var(--blue-dim); }
+
+/* TOAST */
+.toast {
+  position: fixed; bottom: 2rem; right: 2rem;
+  background: var(--bg3);
+  border: 1px solid var(--blue);
+  color: var(--white);
+  font-family: var(--ff-mono);
+  font-size: 0.8rem;
+  padding: 1rem 1.5rem;
+  z-index: 999;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.4s;
+}
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.error { border-color: var(--red); }
+
+/* RESPONSIVE */
+@media (max-width: 800px) {
+  .admin-body { grid-template-columns: 1fr; }
+  .form-panel { position: static; }
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-grid-bg"></div>
+  <div class="login-box">
+    <div class="login-logo">Portfolio Admin</div>
+    <div class="login-title">Welcome back 👋</div>
+    <div class="login-sub">Enter your password to manage your projects.</div>
+    <div class="login-input-wrap">
+      <label>Password</label>
+      <input type="password" id="passwordInput" placeholder="••••••••" onkeydown="handleKey(event)"/>
+    </div>
+    <button class="login-btn" onclick="login()">Enter Dashboard</button>
+    <div class="login-error" id="loginError">Incorrect password. Try again.</div>
+    <div class="login-hint">
+      Forgot your password? <a href="mailto:ajeyemi.godfrey@gmail.com">Contact yourself</a> 😄
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div id="adminScreen">
+  <div class="admin-header">
+    <div class="admin-logo">godfrey<span>.dev</span> / admin</div>
+    <div class="admin-header-right">
+      <a href="index.html" target="_blank" class="admin-view-btn">View Portfolio</a>
+      <button class="admin-logout" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="admin-body">
+    <!-- LEFT: Project List -->
+    <div>
+      <div class="panel-title">
+        All Projects
+        <span class="project-count" id="projectCount">0 projects</span>
+      </div>
+      <div class="projects-list" id="projectsList"></div>
+    </div>
+
+    <!-- RIGHT: Form -->
+    <div class="form-panel">
+      <div class="form-panel-title" id="formTitle">Add New Project</div>
+
+      <div class="field">
+        <label>Project Name *</label>
+        <input type="text" id="fName" placeholder="e.g. E-Commerce Store"/>
+      </div>
+
+      <div class="field">
+        <label>Description *</label>
+        <textarea id="fDesc" placeholder="What does this project do? What problem does it solve?"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Tech Stack / Tags *</label>
+        <input type="text" id="fTags" placeholder="Python, Django, React (comma separated)"/>
+        <div class="field-hint">Separate each technology with a comma</div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label>GitHub URL</label>
+          <input type="text" id="fGithub" placeholder="https://github.com/..."/>
+        </div>
+        <div class="field">
+          <label>Live Demo URL</label>
+          <input type="text" id="fLive" placeholder="https://...netlify.app"/>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Project Icon</label>
+        <div class="icon-picker" id="iconPicker"></div>
+      </div>
+
+      <label class="featured-toggle" onclick="toggleFeatured()">
+        <input type="checkbox" id="fFeatured"/>
+        <div class="toggle-track" id="toggleTrack">
+          <div class="toggle-thumb"></div>
+        </div>
+        <div class="toggle-label">Mark as Featured (shows large at top)</div>
+      </label>
+
+      <input type="hidden" id="fEditId" value=""/>
+
+      <div class="form-actions">
+        <button class="btn-save" onclick="saveProject()">Save Project</button>
+        <button class="btn-cancel" onclick="resetForm()">Clear</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+
+  // PASSWORD — change this to whatever you want
+  var ADMIN_PASSWORD = 'godfrey2026';
+
+  var ICONS = ['💻','🌐','📱','🛒','🍽️','💬','🤖','🎟️','📊','🏦','🎨','⚙️','🚀','🔐','📝','🎵','🏋️','📸','🗺️','💡'];
+
+  var selectedIcon = '💻';
+  var featuredOn = false;
+
+  // DEFAULT PROJECTS — must match index.html
+  var DEFAULT_PROJECTS = [
+    {
+      id: 1,
+      name: "NOIR Lagos",
+      desc: "A dark luxury restaurant website with a fully functional cart system, payment flow (Card, Bank Transfer, USSD), table reservation, interactive menu tabs, and localStorage persistence. Built entirely with vanilla HTML, CSS and JavaScript.",
+      tags: ["HTML5", "CSS3", "JavaScript", "LocalStorage", "Netlify"],
+      github: "https://github.com/Godfreyoz/noir-lagos",
+      live: "https://69ad602b177d675c8c0acd93--thunderous-sherbet-51b60c.netlify.app/",
+      icon: "🍽️",
+      featured: true
+    },
+    {
+      id: 2,
+      name: "Django Chat App",
+      desc: "A real-time chat application built with Python and Django. Features user authentication, chat rooms, and live messaging functionality.",
+      tags: ["Python", "Django", "WebSockets", "PostgreSQL"],
+      github: "https://github.com/Godfreyoz/djangochat",
+      live: "",
+      icon: "💬",
+      featured: false
+    },
+    {
+      id: 3,
+      name: "Python Chatbot",
+      desc: "An intelligent chatbot built with Python and Django. Processes natural language input and provides automated responses for customer interactions.",
+      tags: ["Python", "Django", "NLP", "REST API"],
+      github: "https://github.com/Godfreyoz/my_chatbot",
+      live: "",
+      icon: "🤖",
+      featured: false
+    },
+    {
+      id: 4,
+      name: "Event Ticketing System",
+      desc: "A full event management and ticketing platform. Users can create events, purchase tickets, and manage bookings through a clean Django-powered interface.",
+      tags: ["Python", "Django", "PostgreSQL", "Payments"],
+      github: "https://github.com/Godfreyoz/event_ticketing",
+      live: "",
+      icon: "🎟️",
+      featured: false
+    }
+  ];
+
+  // STORAGE
+  function getProjects() {
+    try {
+      var s = localStorage.getItem('godfrey_projects');
+      if (s) { var p = JSON.parse(s); if (p && p.length > 0) return p; }
+    } catch(e) {}
+    return JSON.parse(JSON.stringify(DEFAULT_PROJECTS));
+  }
+
+  function saveProjects(projects) {
+    try { localStorage.setItem('godfrey_projects', JSON.stringify(projects)); return true; }
+    catch(e) { return false; }
+  }
+
+  function getNextId(projects) {
+    var max = 0;
+    for (var i = 0; i < projects.length; i++) { if (projects[i].id > max) max = projects[i].id; }
+    return max + 1;
+  }
+
+  // AUTH
+  window.handleKey = function(e) { if (e.key === 'Enter') login(); };
+
+  window.login = function() {
+    var val = document.getElementById('passwordInput').value;
+    if (val === ADMIN_PASSWORD) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminScreen').style.display = 'block';
+      initAdmin();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+      document.getElementById('passwordInput').value = '';
+      document.getElementById('passwordInput').focus();
+    }
+  };
+
+  window.logout = function() {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('adminScreen').style.display = 'none';
+    document.getElementById('passwordInput').value = '';
+  };
+
+  // INIT ADMIN
+  function initAdmin() {
+    buildIconPicker();
+    renderList();
+  }
+
+  // ICON PICKER
+  function buildIconPicker() {
+    var picker = document.getElementById('iconPicker');
+    var html = '';
+    for (var i = 0; i < ICONS.length; i++) {
+      var sel = ICONS[i] === selectedIcon ? ' selected' : '';
+      html += '<div class="icon-opt' + sel + '" onclick="pickIcon(this, \'' + ICONS[i] + '\')">' + ICONS[i] + '</div>';
+    }
+    picker.innerHTML = html;
+  }
+
+  window.pickIcon = function(el, icon) {
+    selectedIcon = icon;
+    var opts = document.querySelectorAll('.icon-opt');
+    for (var i = 0; i < opts.length; i++) opts[i].classList.remove('selected');
+    el.classList.add('selected');
+  };
+
+  // FEATURED TOGGLE
+  window.toggleFeatured = function() {
+    featuredOn = !featuredOn;
+    var track = document.getElementById('toggleTrack');
+    var cb = document.getElementById('fFeatured');
+    if (featuredOn) track.classList.add('on'); else track.classList.remove('on');
+    cb.checked = featuredOn;
+  };
+
+  // RENDER LIST
+  function renderList() {
+    var projects = getProjects();
+    var list = document.getElementById('projectsList');
+    var countEl = document.getElementById('projectCount');
+    countEl.textContent = projects.length + ' project' + (projects.length !== 1 ? 's' : '');
+
+    if (projects.length === 0) {
+      list.innerHTML = '<div class="empty-state"><div class="big">📂</div><p>No projects yet.</p><p style="font-size:0.8rem;margin-top:0.5rem">Add your first project using the form.</p></div>';
+      return;
+    }
+
+    var html = '';
+    for (var i = 0; i < projects.length; i++) {
+      var p = projects[i];
+      var tagsStr = p.tags.join(', ');
+      html += '<div class="project-row">';
+      if (p.featured) html += '<div class="featured-dot" title="Featured"></div>';
+      html += '<div class="project-row-icon">' + p.icon + '</div>';
+      html += '<div class="project-row-info">';
+      html += '<div class="project-row-name">' + p.name + '</div>';
+      html += '<div class="project-row-tags">' + tagsStr + '</div>';
+      html += '</div>';
+      html += '<div class="project-row-actions">';
+      html += '<button class="btn-edit" onclick="editProject(' + p.id + ')">Edit</button>';
+      html += '<button class="btn-delete" onclick="deleteProject(' + p.id + ')">Delete</button>';
+      html += '</div>';
+      html += '</div>';
+    }
+    list.innerHTML = html;
+  }
+
+  // SAVE
+  window.saveProject = function() {
+    var name = document.getElementById('fName').value.trim();
+    var desc = document.getElementById('fDesc').value.trim();
+    var tagsRaw = document.getElementById('fTags').value.trim();
+    var github = document.getElementById('fGithub').value.trim();
+    var live = document.getElementById('fLive').value.trim();
+    var editId = document.getElementById('fEditId').value;
+
+    if (!name || !desc || !tagsRaw) {
+      showToast('Please fill in Name, Description and Tags.', true);
+      return;
+    }
+
+    var tags = tagsRaw.split(',');
+    for (var i = 0; i < tags.length; i++) tags[i] = tags[i].trim();
+    tags = tags.filter(function(t) { return t.length > 0; });
+
+    var projects = getProjects();
+
+    if (editId) {
+      // Update existing
+      for (var i = 0; i < projects.length; i++) {
+        if (projects[i].id === parseInt(editId)) {
+          projects[i].name = name;
+          projects[i].desc = desc;
+          projects[i].tags = tags;
+          projects[i].github = github;
+          projects[i].live = live;
+          projects[i].icon = selectedIcon;
+          projects[i].featured = featuredOn;
+          break;
+        }
+      }
+      saveProjects(projects);
+      showToast('Project updated successfully!');
+    } else {
+      // Add new
+      var newProject = {
+        id: getNextId(projects),
+        name: name,
+        desc: desc,
+        tags: tags,
+        github: github,
+        live: live,
+        icon: selectedIcon,
+        featured: featuredOn
+      };
+      projects.push(newProject);
+      saveProjects(projects);
+      showToast('Project added successfully!');
+    }
+
+    resetForm();
+    renderList();
+  };
+
+  // EDIT
+  window.editProject = function(id) {
+    var projects = getProjects();
+    var p = null;
+    for (var i = 0; i < projects.length; i++) { if (projects[i].id === id) { p = projects[i]; break; } }
+    if (!p) return;
+
+    document.getElementById('fName').value = p.name;
+    document.getElementById('fDesc').value = p.desc;
+    document.getElementById('fTags').value = p.tags.join(', ');
+    document.getElementById('fGithub').value = p.github || '';
+    document.getElementById('fLive').value = p.live || '';
+    document.getElementById('fEditId').value = p.id;
+    document.getElementById('formTitle').textContent = 'Edit Project';
+
+    selectedIcon = p.icon;
+    buildIconPicker();
+
+    featuredOn = p.featured;
+    var track = document.getElementById('toggleTrack');
+    if (featuredOn) track.classList.add('on'); else track.classList.remove('on');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // DELETE
+  window.deleteProject = function(id) {
+    var projects = getProjects();
+    var name = '';
+    for (var i = 0; i < projects.length; i++) { if (projects[i].id === id) { name = projects[i].name; break; } }
+    projects = projects.filter(function(p) { return p.id !== id; });
+    saveProjects(projects);
+    renderList();
+    showToast(name + ' deleted.');
+  };
+
+  // RESET FORM
+  window.resetForm = function() {
+    document.getElementById('fName').value = '';
+    document.getElementById('fDesc').value = '';
+    document.getElementById('fTags').value = '';
+    document.getElementById('fGithub').value = '';
+    document.getElementById('fLive').value = '';
+    document.getElementById('fEditId').value = '';
+    document.getElementById('formTitle').textContent = 'Add New Project';
+    selectedIcon = '💻';
+    featuredOn = false;
+    var track = document.getElementById('toggleTrack');
+    track.classList.remove('on');
+    buildIconPicker();
+  };
+
+  // TOAST
+  function showToast(msg, isError) {
+    var t = document.getElementById('toast');
+    if (!t) return;
+    t.textContent = msg;
+    t.classList.remove('error');
+    if (isError) t.classList.add('error');
+    t.classList.add('show');
+    setTimeout(function() { t.classList.remove('show'); }, 3000);
+  }
+
+})();
+</script>
+</body>
+</html>

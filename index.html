@@ -584,7 +584,7 @@ footer {
 </head>
 <body>
 
-<div class="toast" id="toast" id="toastMsg"></div>
+<div class="toast" id="toast"></div>
 
 <!-- NAV -->
 <nav id="navbar">
@@ -679,7 +679,7 @@ footer {
         <div class="about-card-icon">📧</div>
         <div>
           <div class="about-card-label">Email</div>
-          <div class="about-card-value" id="aboutEmail">ajeyemi.godfrey@gmail.com</div>
+          <div class="about-card-value" id="aboutEmail">Loading...</div>
           <div class="about-card-sub">Usually replies within 24 hours</div>
         </div>
       </div>
@@ -788,7 +788,7 @@ footer {
           <div class="contact-item-icon">📧</div>
           <div>
             <div class="contact-item-label">Email</div>
-            <div class="contact-item-value" id="contactEmail">ajeyemi.godfrey@gmail.com</div>
+            <div class="contact-item-value" id="contactEmail">Loading...</div>
           </div>
         </div>
         <div class="contact-item">
@@ -815,7 +815,8 @@ footer {
       </div>
     </div>
     <div>
-      <form id="contactForm" action="https://formspree.io/f/mgonvrkj" method="POST">
+      <!-- No action/method — submitted via fetch() below -->
+      <form id="contactForm" class="contact-form">
         <div class="form-row">
           <div class="form-group">
             <label>Your Name</label>
@@ -834,7 +835,7 @@ footer {
           <label>Message</label>
           <textarea name="message" placeholder="Tell me about your project or opportunity..." required></textarea>
         </div>
-        <button type="submit" class="btn-primary" style="width:100%;border:none;cursor:pointer;font-size:0.85rem;">Send Message →</button>
+        <button type="submit" class="btn-primary" id="submitBtn" style="width:100%;border:none;cursor:pointer;font-size:0.85rem;">Send Message →</button>
       </form>
     </div>
   </div>
@@ -852,9 +853,31 @@ footer {
 </footer>
 
 <script>
-(function() {
+(function () {
 
-  // DEFAULT PROJECTS — pre-loaded data
+  /* ── EMAIL ──────────────────────────────────────────────────
+     Build the address at runtime so plain-text crawlers miss it.
+  ──────────────────────────────────────────────────────────── */
+  var em = ['ajeyemi', '.godfrey', '@gmail', '.com'].join('');
+
+  // Hire Me button (nav)
+  var hireBtn = document.getElementById('hireBtn');
+  if (hireBtn) hireBtn.href = 'mailto:' + em;
+
+  // Footer email button
+  var footerEmail = document.getElementById('footerEmail');
+  if (footerEmail) footerEmail.href = 'mailto:' + em;
+
+  // About card email display
+  var aboutEmail = document.getElementById('aboutEmail');
+  if (aboutEmail) aboutEmail.textContent = em;
+
+  // Contact section email display
+  var contactEmail = document.getElementById('contactEmail');
+  if (contactEmail) contactEmail.textContent = em;
+
+
+  /* ── PROJECTS ───────────────────────────────────────────── */
   var DEFAULT_PROJECTS = [
     {
       id: 1,
@@ -898,7 +921,6 @@ footer {
     }
   ];
 
-  // Load projects — use localStorage if available, otherwise defaults
   function getProjects() {
     try {
       var saved = localStorage.getItem('godfrey_projects');
@@ -910,7 +932,6 @@ footer {
     return DEFAULT_PROJECTS;
   }
 
-  // Render all projects into the grid
   function renderProjects() {
     var grid = document.getElementById('projectsGrid');
     if (!grid) return;
@@ -923,7 +944,7 @@ footer {
         tagsHtml += '<span class="project-tag">' + p.tags[t] + '</span>';
       }
       var linksHtml = '';
-      if (p.live) linksHtml += '<a href="' + p.live + '" target="_blank" class="project-link">Live Demo</a>';
+      if (p.live)   linksHtml += '<a href="' + p.live   + '" target="_blank" class="project-link">Live Demo</a>';
       if (p.github) linksHtml += '<a href="' + p.github + '" target="_blank" class="project-link">GitHub</a>';
 
       if (p.featured) {
@@ -951,26 +972,19 @@ footer {
     grid.innerHTML = html;
   }
 
-
-  // Build email links at runtime (prevents obfuscation)
-  var em = ['ajeyemi','.godfrey','@gmail','.com'].join('');
-  var hireBtn = document.getElementById('hireBtn');
-  if (hireBtn) hireBtn.href = 'mailto:' + em;
-  var footerEmail = document.getElementById('footerEmail');
-  if (footerEmail) footerEmail.href = 'mailto:' + em;
-
-  // Run on load
   renderProjects();
 
-  // NAVBAR
-  window.addEventListener('scroll', function() {
+
+  /* ── NAVBAR SCROLL ──────────────────────────────────────── */
+  window.addEventListener('scroll', function () {
     var nav = document.getElementById('navbar');
     if (!nav) return;
     if (window.scrollY > 60) nav.classList.add('scrolled');
     else nav.classList.remove('scrolled');
   });
 
-  // TYPEWRITER
+
+  /* ── TYPEWRITER ─────────────────────────────────────────── */
   var titles = [
     'Full-Stack Developer',
     'Django & Python Engineer',
@@ -978,9 +992,7 @@ footer {
     'IT Specialist',
     'Available for Hire'
   ];
-  var titleIdx = 0;
-  var charIdx = 0;
-  var deleting = false;
+  var titleIdx = 0, charIdx = 0, deleting = false;
   var el = document.getElementById('typed-text');
 
   function type() {
@@ -1009,21 +1021,49 @@ footer {
   }
   setTimeout(type, 800);
 
-  // TOAST
+
+  /* ── TOAST ──────────────────────────────────────────────── */
   function showToast(msg) {
     var t = document.getElementById('toast');
     if (!t) return;
     t.textContent = msg;
     t.classList.add('show');
-    setTimeout(function() { t.classList.remove('show'); }, 3000);
+    setTimeout(function () { t.classList.remove('show'); }, 3500);
   }
 
-  // FORM
-  window.submitForm = function(e) {
-    e.preventDefault();
-    showToast('Message sent! I will get back to you within 24 hours.');
-    e.target.reset();
-  };
+
+  /* ── CONTACT FORM — AJAX submit to Formspree ────────────── */
+  var form = document.getElementById('contactForm');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      var btn = document.getElementById('submitBtn');
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+
+      fetch('https://formspree.io/f/mgonvrkj', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      })
+      .then(function (res) {
+        if (res.ok) {
+          showToast('✅ Message sent! I\'ll get back to you within 24 hours.');
+          form.reset();
+        } else {
+          showToast('⚠️ Something went wrong. Please email me directly.');
+        }
+      })
+      .catch(function () {
+        showToast('⚠️ Network error. Please email me directly.');
+      })
+      .finally(function () {
+        btn.textContent = 'Send Message →';
+        btn.disabled = false;
+      });
+    });
+  }
 
 })();
 </script>

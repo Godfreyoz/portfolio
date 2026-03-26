@@ -73,6 +73,7 @@ nav.scrolled {
   border: 1px solid var(--blue);
   padding: 0.5rem 1.2rem;
   transition: all 0.3s;
+  cursor: pointer;
 }
 .nav-hire:hover { background: var(--blue-dim); }
 
@@ -171,6 +172,20 @@ nav.scrolled {
   display: inline-block;
 }
 .btn-secondary:hover { border-color: var(--blue); color: var(--blue); }
+.btn-cv {
+  font-family: var(--ff-mono);
+  font-size: 0.8rem;
+  color: var(--teal);
+  border: 1px solid rgba(57,211,83,0.4);
+  background: rgba(57,211,83,0.07);
+  padding: 0.9rem 2rem;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+.btn-cv:hover { background: rgba(57,211,83,0.15); border-color: var(--teal); transform: translateY(-2px); }
 .hero-stats {
   display: flex; gap: 3rem;
   margin-top: 5rem;
@@ -369,6 +384,9 @@ section { padding: 7rem 4rem; }
 }
 .timeline-company span { color: var(--teal); }
 .timeline-desc { color: var(--muted); font-size: 0.95rem; line-height: 1.8; }
+.timeline-bullets { color: var(--muted); font-size: 0.9rem; line-height: 1.8; padding-left: 0; list-style: none; margin-top: 0.5rem; }
+.timeline-bullets li { padding: 0.25rem 0; display: flex; align-items: flex-start; gap: 0.6rem; }
+.timeline-bullets li::before { content: '▸'; color: var(--blue); font-size: 0.7rem; margin-top: 0.35rem; flex-shrink: 0; }
 .timeline-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; }
 .timeline-tag {
   font-family: var(--ff-mono);
@@ -584,7 +602,7 @@ footer {
 </head>
 <body>
 
-<div class="toast" id="toast" id="toastMsg"></div>
+<div class="toast" id="toast"></div>
 
 <!-- NAV -->
 <nav id="navbar">
@@ -616,6 +634,7 @@ footer {
       <a href="#projects" class="btn-primary">View My Work</a>
       <a href="#contact" class="btn-secondary">Get In Touch</a>
       <a href="https://github.com/Godfreyoz" target="_blank" class="btn-secondary">GitHub ↗</a>
+      <a href="Godfrey_Ajeyemi_CV.pdf" download="Godfrey_Ajeyemi_CV.pdf" class="btn-cv" id="cvBtn">⬇ Download CV</a>
     </div>
     <div class="hero-stats">
       <div>
@@ -640,9 +659,9 @@ footer {
   <h2 class="section-title">The person <em>behind the code</em></h2>
   <div class="about-grid">
     <div class="about-text">
-      <p>I'm a <strong>Full-Stack Developer and IT Specialist</strong> based in Lagos, Nigeria. I currently work at <strong>Regency Alliance Insurance Plc</strong>, where I manage their core insurance application, company website, and PostgreSQL database infrastructure.</p>
-      <p>I studied <strong>Computer Science</strong> at D.S. Adegbenro ICT Polytechnic and have been building for the web ever since — from Django backends to React frontends. I love turning complex problems into clean, simple solutions.</p>
-      <p>Outside of work, I'm constantly building — whether it's a <strong>restaurant website</strong>, a <strong>chat application</strong>, or an <strong>event ticketing system</strong>. I believe the best developers never stop shipping.</p>
+      <p>I'm a <strong>Full-Stack Developer and IT Specialist</strong> based in Lagos, Nigeria. I currently work at <strong>Regency Alliance Insurance Plc</strong>, where I built and manage AssetVerify — a production platform handling field inspections across all 36 Nigerian states.</p>
+      <p>I studied <strong>Computer Science</strong> at D.S. Adegbenro ICT Polytechnic and have been building for the web ever since — from Django backends and REST APIs to React frontends. I love turning complex problems into clean, simple solutions.</p>
+      <p>Outside of work, I'm constantly building — whether it's integrating <strong>AI into business workflows</strong>, building <strong>real-time applications</strong>, or crafting polished user interfaces. I believe the best developers never stop shipping.</p>
       <div class="about-tags">
         <span class="about-tag">Open to Freelance</span>
         <span class="about-tag">Remote-Friendly</span>
@@ -655,7 +674,7 @@ footer {
         <div class="about-card-icon">🏢</div>
         <div>
           <div class="about-card-label">Current Role</div>
-          <div class="about-card-value">IT Specialist & Developer</div>
+          <div class="about-card-value">Software Developer & IT Specialist</div>
           <div class="about-card-sub">Regency Alliance Insurance Plc</div>
         </div>
       </div>
@@ -679,7 +698,7 @@ footer {
         <div class="about-card-icon">📧</div>
         <div>
           <div class="about-card-label">Email</div>
-          <div class="about-card-value" id="aboutEmail">ajeyemi.godfrey@gmail.com</div>
+          <div class="about-card-value" id="aboutEmail"></div>
           <div class="about-card-sub">Usually replies within 24 hours</div>
         </div>
       </div>
@@ -709,21 +728,23 @@ footer {
       <div class="skill-card-title">Backend</div>
       <ul class="skill-list">
         <li><strong>Python</strong> — Core language</li>
-        <li><strong>Django</strong> — Web framework</li>
-        <li><strong>REST APIs</strong> — Design & integration</li>
+        <li><strong>Django & DRF</strong> — Web framework & APIs</li>
         <li><strong>PostgreSQL</strong> — Database management</li>
-        <li><strong>WordPress</strong> — CMS development</li>
+        <li><strong>Supabase</strong> — Cloud database</li>
+        <li><strong>Groq AI</strong> — AI integration (llama-3.3)</li>
+        <li><strong>Node.js</strong> — Server-side JS</li>
       </ul>
     </div>
     <div class="skill-card">
       <div class="skill-card-icon">🛠️</div>
-      <div class="skill-card-title">Tools & Other</div>
+      <div class="skill-card-title">DevOps & Tools</div>
       <ul class="skill-list">
         <li><strong>Git & GitHub</strong> — Version control</li>
-        <li><strong>Netlify</strong> — Deployment & hosting</li>
-        <li><strong>VS Code</strong> — Primary editor</li>
-        <li><strong>Project Management</strong> — Team coordination</li>
-        <li><strong>Microsoft Office</strong> — Documentation</li>
+        <li><strong>Render / Railway</strong> — Deployment</li>
+        <li><strong>Linux</strong> — Server administration</li>
+        <li><strong>Docker</strong> — Containerisation</li>
+        <li><strong>Network Security</strong> — IT infrastructure</li>
+        <li><strong>Cloudinary</strong> — Media management</li>
       </ul>
     </div>
   </div>
@@ -737,31 +758,38 @@ footer {
     <div class="timeline-item">
       <div class="timeline-dot"></div>
       <div class="timeline-date">2024 — Present</div>
-      <div class="timeline-role">IT Specialist & Developer</div>
+      <div class="timeline-role">Software Developer & IT Specialist</div>
       <div class="timeline-company">Regency Alliance Insurance Plc <span>· Lagos, Nigeria</span></div>
-      <div class="timeline-desc">
-        Manage and maintain the company's core insurance package application, ensuring 99.9% uptime. Oversee and optimise the PostgreSQL database infrastructure. Maintain and update the company website, implementing new features and improvements. Provide technical support and IT infrastructure management across the organisation.
-      </div>
+      <ul class="timeline-bullets">
+        <li>Built and deployed AssetVerify — a full-stack asset inspection platform used across all 36 Nigerian states</li>
+        <li>Developed REST APIs with Django and PostgreSQL managing 1,500+ collateral assets and field agent workflows</li>
+        <li>Integrated Groq AI (llama-3.3-70b) to auto-enhance field reports into formal insurance documents</li>
+        <li>Implemented role-based access control, approval workflows, and automated PDF & bulk ZIP generation</li>
+        <li>Manage IT infrastructure including network administration, server security, and hardware maintenance</li>
+      </ul>
       <div class="timeline-tags">
-        <span class="timeline-tag">PostgreSQL</span>
         <span class="timeline-tag">Python</span>
-        <span class="timeline-tag">Web Development</span>
-        <span class="timeline-tag">IT Support</span>
-        <span class="timeline-tag">Database Admin</span>
+        <span class="timeline-tag">Django</span>
+        <span class="timeline-tag">PostgreSQL</span>
+        <span class="timeline-tag">Groq AI</span>
+        <span class="timeline-tag">REST APIs</span>
+        <span class="timeline-tag">IT Infrastructure</span>
       </div>
     </div>
     <div class="timeline-item">
       <div class="timeline-dot"></div>
       <div class="timeline-date">2023 — 2024</div>
-      <div class="timeline-role">IT Specialist (NYSC)</div>
-      <div class="timeline-company">National Youth Service Corps <span>· Nigeria</span></div>
-      <div class="timeline-desc">
-        Completed mandatory national service as an IT Specialist. Provided technical support, assisted with digital infrastructure, and contributed to web development projects during the service year.
-      </div>
+      <div class="timeline-role">Data Officer</div>
+      <div class="timeline-company">INEC — Independent National Electoral Commission <span>· Nigeria</span></div>
+      <ul class="timeline-bullets">
+        <li>Managed and processed electoral data with high accuracy and data integrity standards</li>
+        <li>Generated statistical reports and coordinated data entry and quality control across multiple teams</li>
+        <li>Operated data management systems to support national electoral decision-making</li>
+      </ul>
       <div class="timeline-tags">
-        <span class="timeline-tag">IT Support</span>
-        <span class="timeline-tag">Web Development</span>
-        <span class="timeline-tag">Technical Training</span>
+        <span class="timeline-tag">Data Management</span>
+        <span class="timeline-tag">Statistical Reporting</span>
+        <span class="timeline-tag">Quality Control</span>
       </div>
     </div>
   </div>
@@ -788,7 +816,7 @@ footer {
           <div class="contact-item-icon">📧</div>
           <div>
             <div class="contact-item-label">Email</div>
-            <div class="contact-item-value" id="contactEmail">ajeyemi.godfrey@gmail.com</div>
+            <div class="contact-item-value" id="contactEmail"></div>
           </div>
         </div>
         <div class="contact-item">
@@ -854,22 +882,52 @@ footer {
 <script>
 (function() {
 
-  // DEFAULT PROJECTS — pre-loaded data
+  // ─── EMAIL — built entirely in JS so Netlify cannot obfuscate it ───
+  var e = 'ajeyemi' + '.' + 'godfrey' + '@' + 'gmail' + '.' + 'com';
+
+  // Hire Me button
+  var hireBtn = document.getElementById('hireBtn');
+  if (hireBtn) hireBtn.href = 'mailto:' + e;
+
+  // Footer email button
+  var footerEmail = document.getElementById('footerEmail');
+  if (footerEmail) footerEmail.href = 'mailto:' + e;
+
+  // About card email text
+  var aboutEmail = document.getElementById('aboutEmail');
+  if (aboutEmail) aboutEmail.textContent = e;
+
+  // Contact section email text
+  var contactEmail = document.getElementById('contactEmail');
+  if (contactEmail) contactEmail.textContent = e;
+
+
+  // ─── DEFAULT PROJECTS ───────────────────────────────────────────────
   var DEFAULT_PROJECTS = [
     {
       id: 1,
+      name: "AssetVerify",
+      desc: "Production-ready full-stack asset inspection platform deployed at Regency Alliance Insurance Plc. Manages 1,500+ collateral assets across all 36 Nigerian states. Features role-based auth, AI-enhanced reports via Groq (llama-3.3-70b), automated PDF generation, bulk ZIP export, and mobile-responsive UI.",
+      tags: ["Python", "Django", "PostgreSQL", "Groq AI", "Cloudinary", "Render"],
+      github: "https://github.com/Godfreyoz/assetverify",
+      live: "https://assetverify.onrender.com",
+      icon: "🏦",
+      featured: true
+    },
+    {
+      id: 2,
       name: "NOIR Lagos",
       desc: "A dark luxury restaurant website with a fully functional cart system, payment flow (Card, Bank Transfer, USSD), table reservation, interactive menu tabs, and localStorage persistence. Built entirely with vanilla HTML, CSS and JavaScript.",
       tags: ["HTML5", "CSS3", "JavaScript", "LocalStorage", "Netlify"],
       github: "https://github.com/Godfreyoz/noir-lagos",
       live: "https://69ad602b177d675c8c0acd93--thunderous-sherbet-51b60c.netlify.app/",
       icon: "🍽️",
-      featured: true
+      featured: false
     },
     {
-      id: 2,
+      id: 3,
       name: "Django Chat App",
-      desc: "A real-time chat application built with Python and Django. Features user authentication, chat rooms, and live messaging functionality.",
+      desc: "A real-time chat application built with Python and Django. Features user authentication, chat rooms, and live messaging functionality using WebSockets.",
       tags: ["Python", "Django", "WebSockets", "PostgreSQL"],
       github: "https://github.com/Godfreyoz/djangochat",
       live: "",
@@ -877,19 +935,9 @@ footer {
       featured: false
     },
     {
-      id: 3,
-      name: "Python Chatbot",
-      desc: "An intelligent chatbot built with Python and Django. Processes natural language input and provides automated responses for customer interactions.",
-      tags: ["Python", "Django", "NLP", "REST API"],
-      github: "https://github.com/Godfreyoz/my_chatbot",
-      live: "",
-      icon: "🤖",
-      featured: false
-    },
-    {
       id: 4,
       name: "Event Ticketing System",
-      desc: "A full event management and ticketing platform. Users can create events, purchase tickets, and manage bookings through a clean Django-powered interface.",
+      desc: "A full event management and ticketing platform. Users can create events, purchase tickets, and manage bookings through a clean Django-powered interface with payment integration.",
       tags: ["Python", "Django", "PostgreSQL", "Payments"],
       github: "https://github.com/Godfreyoz/event_ticketing",
       live: "",
@@ -898,7 +946,7 @@ footer {
     }
   ];
 
-  // Load projects — use localStorage if available, otherwise defaults
+  // ─── STORAGE ────────────────────────────────────────────────────────
   function getProjects() {
     try {
       var saved = localStorage.getItem('godfrey_projects');
@@ -906,11 +954,11 @@ footer {
         var parsed = JSON.parse(saved);
         if (parsed && parsed.length > 0) return parsed;
       }
-    } catch (e) {}
+    } catch (err) {}
     return DEFAULT_PROJECTS;
   }
 
-  // Render all projects into the grid
+  // ─── RENDER PROJECTS ────────────────────────────────────────────────
   function renderProjects() {
     var grid = document.getElementById('projectsGrid');
     if (!grid) return;
@@ -923,14 +971,14 @@ footer {
         tagsHtml += '<span class="project-tag">' + p.tags[t] + '</span>';
       }
       var linksHtml = '';
-      if (p.live) linksHtml += '<a href="' + p.live + '" target="_blank" class="project-link">Live Demo</a>';
-      if (p.github) linksHtml += '<a href="' + p.github + '" target="_blank" class="project-link">GitHub</a>';
+      if (p.live) linksHtml += '<a href="' + p.live + '" target="_blank" class="project-link">Live Demo ↗</a>';
+      if (p.github) linksHtml += '<a href="' + p.github + '" target="_blank" class="project-link">GitHub ↗</a>';
 
       if (p.featured) {
         html += '<div class="project-card featured">';
         html += '<div class="project-featured-visual"><div class="big-icon">' + p.icon + '</div><span>Live Project</span></div>';
         html += '<div class="project-body">';
-        html += '<span class="featured-badge">Featured</span>';
+        html += '<span class="featured-badge">⭐ Featured</span>';
         html += '<div class="project-name">' + p.name + '</div>';
         html += '<div class="project-desc">' + p.desc + '</div>';
         html += '<div class="project-tags">' + tagsHtml + '</div>';
@@ -951,18 +999,9 @@ footer {
     grid.innerHTML = html;
   }
 
-
-  // Build email links at runtime (prevents obfuscation)
-  var em = ['ajeyemi','.godfrey','@gmail','.com'].join('');
-  var hireBtn = document.getElementById('hireBtn');
-  if (hireBtn) hireBtn.href = 'mailto:' + em;
-  var footerEmail = document.getElementById('footerEmail');
-  if (footerEmail) footerEmail.href = 'mailto:' + em;
-
-  // Run on load
   renderProjects();
 
-  // NAVBAR
+  // ─── NAVBAR SCROLL ──────────────────────────────────────────────────
   window.addEventListener('scroll', function() {
     var nav = document.getElementById('navbar');
     if (!nav) return;
@@ -970,17 +1009,15 @@ footer {
     else nav.classList.remove('scrolled');
   });
 
-  // TYPEWRITER
+  // ─── TYPEWRITER ─────────────────────────────────────────────────────
   var titles = [
     'Full-Stack Developer',
     'Django & Python Engineer',
     'React & Next.js Developer',
-    'IT Specialist',
+    'AI Integration Specialist',
     'Available for Hire'
   ];
-  var titleIdx = 0;
-  var charIdx = 0;
-  var deleting = false;
+  var titleIdx = 0, charIdx = 0, deleting = false;
   var el = document.getElementById('typed-text');
 
   function type() {
@@ -1009,7 +1046,7 @@ footer {
   }
   setTimeout(type, 800);
 
-  // TOAST
+  // ─── TOAST ──────────────────────────────────────────────────────────
   function showToast(msg) {
     var t = document.getElementById('toast');
     if (!t) return;
@@ -1017,13 +1054,6 @@ footer {
     t.classList.add('show');
     setTimeout(function() { t.classList.remove('show'); }, 3000);
   }
-
-  // FORM
-  window.submitForm = function(e) {
-    e.preventDefault();
-    showToast('Message sent! I will get back to you within 24 hours.');
-    e.target.reset();
-  };
 
 })();
 </script>

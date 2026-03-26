@@ -403,6 +403,20 @@ body {
 .toast.show { transform: translateY(0); opacity: 1; }
 .toast.error { border-color: var(--red); }
 
+/* RESET DEFAULTS BTN */
+.btn-reset-defaults {
+  font-family: var(--ff-mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  background: none;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: 0.5rem;
+}
+.btn-reset-defaults:hover { color: var(--teal); border-color: var(--teal); }
+
 /* RESPONSIVE */
 @media (max-width: 800px) {
   .admin-body { grid-template-columns: 1fr; }
@@ -428,7 +442,7 @@ body {
     <button class="login-btn" onclick="login()">Enter Dashboard</button>
     <div class="login-error" id="loginError">Incorrect password. Try again.</div>
     <div class="login-hint">
-      Forgot your password? <a href="mailto:ajeyemi.godfrey@gmail.com">Contact yourself</a> 😄
+      Forgot your password? <a href="#" id="hintEmail">Contact yourself</a> 😄
     </div>
   </div>
 </div>
@@ -448,18 +462,21 @@ body {
     <div>
       <div class="panel-title">
         All Projects
-        <span class="project-count" id="projectCount">0 projects</span>
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span class="project-count" id="projectCount">0 projects</span>
+          <button class="btn-reset-defaults" onclick="resetToDefaults()">Reset to Defaults</button>
+        </div>
       </div>
       <div class="projects-list" id="projectsList"></div>
     </div>
 
     <!-- RIGHT: Form -->
-    <div class="form-panel">
+    <div class="form-panel" style="position:relative;">
       <div class="form-panel-title" id="formTitle">Add New Project</div>
 
       <div class="field">
         <label>Project Name *</label>
-        <input type="text" id="fName" placeholder="e.g. E-Commerce Store"/>
+        <input type="text" id="fName" placeholder="e.g. AssetVerify"/>
       </div>
 
       <div class="field">
@@ -480,7 +497,7 @@ body {
         </div>
         <div class="field">
           <label>Live Demo URL</label>
-          <input type="text" id="fLive" placeholder="https://...netlify.app"/>
+          <input type="text" id="fLive" placeholder="https://...onrender.com"/>
         </div>
       </div>
 
@@ -510,7 +527,6 @@ body {
 <script>
 (function() {
 
-  // PASSWORD — change this to whatever you want
   var ADMIN_PASSWORD = 'godfrey2025';
 
   var ICONS = ['💻','🌐','📱','🛒','🍽️','💬','🤖','🎟️','📊','🏦','🎨','⚙️','🚀','🔐','📝','🎵','🏋️','📸','🗺️','💡'];
@@ -518,22 +534,31 @@ body {
   var selectedIcon = '💻';
   var featuredOn = false;
 
-  // DEFAULT PROJECTS — must match index.html
   var DEFAULT_PROJECTS = [
     {
       id: 1,
+      name: "AssetVerify",
+      desc: "Production-ready full-stack asset inspection platform deployed at Regency Alliance Insurance Plc. Manages 1,500+ collateral assets across all 36 Nigerian states. Features role-based auth, AI-enhanced reports via Groq (llama-3.3-70b), automated PDF generation, bulk ZIP export, and mobile-responsive UI.",
+      tags: ["Python", "Django", "PostgreSQL", "Groq AI", "Cloudinary", "Render"],
+      github: "https://github.com/Godfreyoz/assetverify",
+      live: "https://assetverify.onrender.com",
+      icon: "🏦",
+      featured: true
+    },
+    {
+      id: 2,
       name: "NOIR Lagos",
       desc: "A dark luxury restaurant website with a fully functional cart system, payment flow (Card, Bank Transfer, USSD), table reservation, interactive menu tabs, and localStorage persistence. Built entirely with vanilla HTML, CSS and JavaScript.",
       tags: ["HTML5", "CSS3", "JavaScript", "LocalStorage", "Netlify"],
       github: "https://github.com/Godfreyoz/noir-lagos",
       live: "https://69ad602b177d675c8c0acd93--thunderous-sherbet-51b60c.netlify.app/",
       icon: "🍽️",
-      featured: true
+      featured: false
     },
     {
-      id: 2,
+      id: 3,
       name: "Django Chat App",
-      desc: "A real-time chat application built with Python and Django. Features user authentication, chat rooms, and live messaging functionality.",
+      desc: "A real-time chat application built with Python and Django. Features user authentication, chat rooms, and live messaging functionality using WebSockets.",
       tags: ["Python", "Django", "WebSockets", "PostgreSQL"],
       github: "https://github.com/Godfreyoz/djangochat",
       live: "",
@@ -541,19 +566,9 @@ body {
       featured: false
     },
     {
-      id: 3,
-      name: "Python Chatbot",
-      desc: "An intelligent chatbot built with Python and Django. Processes natural language input and provides automated responses for customer interactions.",
-      tags: ["Python", "Django", "NLP", "REST API"],
-      github: "https://github.com/Godfreyoz/my_chatbot",
-      live: "",
-      icon: "🤖",
-      featured: false
-    },
-    {
       id: 4,
       name: "Event Ticketing System",
-      desc: "A full event management and ticketing platform. Users can create events, purchase tickets, and manage bookings through a clean Django-powered interface.",
+      desc: "A full event management and ticketing platform. Users can create events, purchase tickets, and manage bookings through a clean Django-powered interface with payment integration.",
       tags: ["Python", "Django", "PostgreSQL", "Payments"],
       github: "https://github.com/Godfreyoz/event_ticketing",
       live: "",
@@ -561,6 +576,13 @@ body {
       featured: false
     }
   ];
+
+  // Set hint email link
+  var hintEl = document.getElementById('hintEmail');
+  if (hintEl) {
+    var em = 'ajeyemi' + '.' + 'godfrey' + '@' + 'gmail' + '.' + 'com';
+    hintEl.href = 'mailto:' + em;
+  }
 
   // STORAGE
   function getProjects() {
@@ -690,7 +712,6 @@ body {
     var projects = getProjects();
 
     if (editId) {
-      // Update existing
       for (var i = 0; i < projects.length; i++) {
         if (projects[i].id === parseInt(editId)) {
           projects[i].name = name;
@@ -706,16 +727,11 @@ body {
       saveProjects(projects);
       showToast('Project updated successfully!');
     } else {
-      // Add new
       var newProject = {
         id: getNextId(projects),
-        name: name,
-        desc: desc,
-        tags: tags,
-        github: github,
-        live: live,
-        icon: selectedIcon,
-        featured: featuredOn
+        name: name, desc: desc, tags: tags,
+        github: github, live: live,
+        icon: selectedIcon, featured: featuredOn
       };
       projects.push(newProject);
       saveProjects(projects);
@@ -760,6 +776,14 @@ body {
     saveProjects(projects);
     renderList();
     showToast(name + ' deleted.');
+  };
+
+  // RESET TO DEFAULTS
+  window.resetToDefaults = function() {
+    if (!confirm('This will restore all 4 default projects and clear any custom ones. Continue?')) return;
+    localStorage.removeItem('godfrey_projects');
+    renderList();
+    showToast('Projects reset to defaults!');
   };
 
   // RESET FORM

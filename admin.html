@@ -314,6 +314,10 @@ body {
   margin-top: 0.3rem;
 }
 .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+
+/* ── FEATURED TOGGLE ─────────────────────────────────────────────────
+   Uses a plain div (not a label) to avoid the browser's built-in
+   checkbox-toggle behaviour that was causing the double-fire bug.   */
 .featured-toggle {
   display: flex; align-items: center; gap: 0.8rem;
   padding: 0.8rem;
@@ -321,8 +325,8 @@ body {
   background: var(--bg3);
   cursor: pointer;
   margin-bottom: 1rem;
+  user-select: none;
 }
-.featured-toggle input[type="checkbox"] { display: none; }
 .toggle-track {
   width: 36px; height: 20px;
   background: var(--border);
@@ -506,14 +510,22 @@ body {
         <div class="icon-picker" id="iconPicker"></div>
       </div>
 
-      <label class="featured-toggle" onclick="toggleFeatured()">
-        <input type="checkbox" id="fFeatured"/>
+      <!--
+        FIX: Changed from <label onclick="toggleFeatured()"> to a plain <div onclick="toggleFeatured()">
+        The old <label> wrapping a <checkbox> caused a double-fire:
+          1) onclick fires toggleFeatured() → flips featuredOn
+          2) Browser default: label click re-fires the checkbox click
+          3) That click bubbles back up to the label → toggleFeatured() fires AGAIN → undoes step 1
+        Using a plain div breaks that loop entirely.
+      -->
+      <div class="featured-toggle" onclick="toggleFeatured()">
         <div class="toggle-track" id="toggleTrack">
           <div class="toggle-thumb"></div>
         </div>
         <div class="toggle-label">Mark as Featured (shows large at top)</div>
-      </label>
+      </div>
 
+      <input type="hidden" id="fFeatured" value=""/>
       <input type="hidden" id="fEditId" value=""/>
 
       <div class="form-actions">
@@ -529,7 +541,22 @@ body {
 
   var ADMIN_PASSWORD = 'godfrey2025';
 
-  var ICONS = ['💻','🌐','📱','🛒','🍽️','💬','🤖','🎟️','📊','🏦','🎨','⚙️','🚀','🔐','📝','🎵','🏋️','📸','🗺️','💡'];
+  // ── EXPANDED ICON SET ──────────────────────────────────────────────
+  // Added 🍁 plus many new categories: nature, finance, tech, travel, etc.
+  var ICONS = [
+    // Tech & Dev
+    '💻','🌐','📱','⚙️','🚀','🔐','🤖','📊','🛒','💬',
+    // Creative & Media
+    '🎨','📝','🎵','📸','🎬','🎮','🧩','📡',
+    // Nature & Seasonal
+    '🍁','🌱','🌍','🌿','🔥','❄️','⚡','🌊',
+    // Finance & Business
+    '🏦','💰','📈','💎','🏆','🎯','📦','🗺️',
+    // Life & Misc
+    '🍽️','🎟️','🏋️','🏠','🎓','🔬','🚗','✈️',
+    // Extra utility
+    '🔧','🧠','💡','🔒'
+  ];
 
   var selectedIcon = '💻';
   var featuredOn = false;
@@ -650,13 +677,13 @@ body {
     el.classList.add('selected');
   };
 
-  // FEATURED TOGGLE
+  // ── FEATURED TOGGLE (fixed) ────────────────────────────────────────
+  // toggleFeatured() is now called by a plain <div>, not a <label>.
+  // No event bubbling loop — one click = one toggle, guaranteed.
   window.toggleFeatured = function() {
     featuredOn = !featuredOn;
     var track = document.getElementById('toggleTrack');
-    var cb = document.getElementById('fFeatured');
     if (featuredOn) track.classList.add('on'); else track.classList.remove('on');
-    cb.checked = featuredOn;
   };
 
   // RENDER LIST

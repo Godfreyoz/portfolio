@@ -1,0 +1,12 @@
+{
+  "name": "Godfrey Ajeyemi — Full-Stack Developer",
+  "short_name": "Godfrey A.",
+  "description": "Full-Stack Developer & IT Specialist in Lagos, Nigeria. Django, Python, React and AI integration.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1f26",
+  "theme_color": "#1a1f26",
+  "icons": [
+    { "src": "/assets/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

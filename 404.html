@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>404 — Page Not Found · Godfrey Ajeyemi</title>
+<meta name="description" content="That page doesn't exist. Head back to godfrey.dev."/>
+<meta name="robots" content="noindex"/>
+<meta name="theme-color" content="#1a1f26"/>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&amp;family=DM+Sans:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap"/>
+<link rel="stylesheet" href="css/style.css"/>
+<script>
+(function () {
+  try {
+    var saved = localStorage.getItem('godfrey_theme');
+    var prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+    if ((saved || (prefersLight ? 'light' : 'dark')) === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  } catch (e) {}
+})();
+</script>
+</head>
+<body>
+
+<main class="notfound">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-glow" aria-hidden="true"></div>
+
+  <div class="wrap" style="position:relative;z-index:2">
+    <p class="section-label" style="justify-content:center">Error 404</p>
+    <p class="notfound-code">404</p>
+    <h1 class="section-title" style="margin-bottom:1rem">This page <em>doesn't exist</em></h1>
+    <p class="section-sub" style="margin-inline:auto">
+      The link may be broken, or the page may have moved. Nothing was lost — let's get you back.
+    </p>
+
+    <div class="hero-ctas" style="justify-content:center;margin-top:2.5rem">
+      <a href="/" class="btn btn-primary">
+        Back to Home
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="/#projects" class="btn btn-ghost">See My Work</a>
+      <a href="/#contact" class="btn btn-ghost">Get In Touch</a>
+    </div>
+  </div>
+</main>
+
+</body>
+</html>

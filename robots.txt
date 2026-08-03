@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+
+# Replace the host below if you deploy to a different domain.
+Sitemap: https://godfrey.dev/sitemap.xml

@@ -28,19 +28,37 @@
     toastTimer = setTimeout(function () { t.classList.remove('show'); }, 4000);
   }
 
-  /* --- EMAIL ------------------------------------------------------------- */
-  /* Assembled at runtime so scrapers reading the raw HTML come up empty. */
+  /* --- CONTACT DETAILS --------------------------------------------------- */
+  /* Email and phone are assembled at runtime so scrapers reading the raw HTML
+     come up empty. Both still render instantly for real visitors. */
   var EMAIL = ['ajeyemi', '.', 'godfrey', '@', 'gmail', '.', 'com'].join('');
+  var PHONE = ['234', '816', '254', '2540'].join('');            // wa.me wants digits only
+  var PHONE_PRETTY = '+234 816 254 2540';
+  var WA_MESSAGE = 'Hi Godfrey, I found your portfolio and would like to talk about a project.';
 
-  function wireEmail() {
+  function waUrl() {
+    return 'https://wa.me/' + PHONE + '?text=' + encodeURIComponent(WA_MESSAGE);
+  }
+
+  function linkify(el, href, text) {
+    var a = document.createElement('a');
+    a.href = href;
+    a.textContent = text;
+    if (href.indexOf('http') === 0) { a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+    el.textContent = '';
+    el.appendChild(a);
+  }
+
+  function wireContacts() {
     $$('[data-email-link]').forEach(function (el) { el.href = 'mailto:' + EMAIL; });
-    $$('[data-email-text]').forEach(function (el) {
-      var a = document.createElement('a');
-      a.href = 'mailto:' + EMAIL;
-      a.textContent = EMAIL;
-      el.textContent = '';
-      el.appendChild(a);
+    $$('[data-email-text]').forEach(function (el) { linkify(el, 'mailto:' + EMAIL, EMAIL); });
+
+    $$('[data-wa-link]').forEach(function (el) {
+      el.href = waUrl();
+      el.target = '_blank';
+      el.rel = 'noopener noreferrer';
     });
+    $$('[data-phone-text]').forEach(function (el) { linkify(el, waUrl(), PHONE_PRETTY); });
   }
 
   /* --- THEME ------------------------------------------------------------- */
@@ -575,7 +593,7 @@
 
   /* --- BOOT -------------------------------------------------------------- */
   function init() {
-    wireEmail();
+    wireContacts();
     wireTheme();
     wireNav();
     wireTypewriter();

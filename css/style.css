@@ -475,6 +475,16 @@ section { padding-block: var(--section); }
 }
 .btn-cv:hover { border-color: var(--teal); background: color-mix(in srgb, var(--teal) 16%, transparent); }
 
+/* WhatsApp keeps its own brand green rather than borrowing the accent, so it
+   reads as the third-party channel it is. Dark text meets AA on that green. */
+.btn-wa {
+  background: #25d366;
+  color: #06210f;
+  border-color: #25d366;
+  box-shadow: 0 8px 24px -12px rgba(37, 211, 102, 0.7);
+}
+.btn-wa:hover { background: #1fb855; border-color: #1fb855; }
+
 .btn[disabled] { opacity: 0.6; pointer-events: none; }
 
 /* Stats */

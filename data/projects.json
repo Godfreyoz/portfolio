@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "name": "AssetVerify",
+    "desc": "Production asset-inspection platform running at Regency Alliance Insurance Plc, tracking 1,500+ collateral assets across all 36 Nigerian states. Role-based auth, AI-enhanced inspection reports via Groq (llama-3.3-70b), automated PDF generation, bulk ZIP export and a mobile-first UI used daily by field officers.",
+    "tags": ["Python", "Django", "PostgreSQL", "Groq AI", "Cloudinary", "Render"],
+    "github": "https://github.com/Godfreyoz/assetverify",
+    "live": "https://assetverify.onrender.com",
+    "icon": "🏦",
+    "image": "",
+    "featured": true
+  },
+  {
+    "id": 2,
+    "name": "NOIR Lagos",
+    "desc": "A dark-luxury restaurant experience with a working cart, multi-method checkout (card, bank transfer, USSD), table reservations, interactive menu tabs and localStorage persistence — built entirely in vanilla HTML, CSS and JavaScript with no framework.",
+    "tags": ["HTML5", "CSS3", "JavaScript", "LocalStorage", "Netlify"],
+    "github": "https://github.com/Godfreyoz/noir-lagos",
+    "live": "https://thunderous-sherbet-51b60c.netlify.app/",
+    "icon": "🍽️",
+    "image": "",
+    "featured": false
+  },
+  {
+    "id": 3,
+    "name": "Django Chat App",
+    "desc": "Real-time messaging built on Django Channels and WebSockets. Handles user authentication, persistent chat rooms and live message delivery without polling.",
+    "tags": ["Python", "Django", "WebSockets", "PostgreSQL"],
+    "github": "https://github.com/Godfreyoz/djangochat",
+    "live": "",
+    "icon": "💬",
+    "image": "",
+    "featured": false
+  },
+  {
+    "id": 4,
+    "name": "Event Ticketing System",
+    "desc": "End-to-end event management and ticketing platform. Organisers create and manage events, attendees purchase tickets and track bookings, all through a Django backend with integrated payments.",
+    "tags": ["Python", "Django", "PostgreSQL", "Payments"],
+    "github": "https://github.com/Godfreyoz/event_ticketing",
+    "live": "",
+    "icon": "🎟️",
+    "image": "",
+    "featured": false
+  }
+]

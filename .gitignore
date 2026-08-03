@@ -1,0 +1,9 @@
+# Temp file left behind only if dev-server.js is killed mid-write
+data/projects.json.tmp
+
+# OS / editor noise
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+.vscode/
